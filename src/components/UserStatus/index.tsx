@@ -20,30 +20,30 @@ export const UserStatus = () => {
             <Styled.DataWrapper>
                 {user.followers !== 0 &&
                 <Styled.Data>
-                    <label>Followers</label>
+                    <strong>Followers</strong>
                     <span aria-label='followers count' >{user.followers}</span>
                 </Styled.Data>
                 }
                 {user.following !== 0 &&
                 <Styled.Data>
-                    <label>Followings</label>
+                    <strong>Followings</strong>
                     <span aria-label='following count' >{user.following}</span>
                 </Styled.Data>
                 }
                 {user.public_gists !== 0 &&
                 <Styled.Data>
-                    <label>Gists</label>
+                    <strong>Gists</strong>
                     <span aria-label='gists count' >{user.public_gists}</span>
                 </Styled.Data>
                 }
                 <Styled.Data>
-                    <label>Repos</label>
+                    <strong>Repos</strong>
                     <span aria-label='repositories count' >{user.public_repos}</span>
                 </Styled.Data>
             </Styled.DataWrapper>
             <div>
                 <Styled.Data>
-                    <label>{user.name} is a Github {user.type} since</label>
+                    <strong>{user.name} is a Github {user.type} since</strong>
                     <span>{date.toLocaleString('en', {year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 </Styled.Data>
             </div>
@@ -78,7 +78,7 @@ const Styled = {
         align-items: center;
         margin: 1rem 0;
         font-size: 1.2rem;
-        label {
+        strong {
             font-weight: bold;
             font-size: 1rem;
             margin-bottom: 0.6rem;
