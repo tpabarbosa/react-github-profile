@@ -7,8 +7,8 @@ describe('<Github />', () => {
     afterEach(() => server.resetHandlers())
     afterAll(() => server.close())
 
-    const Test = ({user}: {user:string}) => {
-        const github = useGithub()
+    const Test = ({user, caller}: {user:string, caller:string}) => {
+        const github = useGithub(caller)
 
         const handleClick = async () => {
             await github.getUser(user)
@@ -29,7 +29,7 @@ describe('<Github />', () => {
     it('should work correctly when useGithub is called by a component that is a child of GithubProvider', async () => {
         render(
             <GithubProvider>
-                <Test user='testuser'/>
+                <Test user='testuser' caller='test 1'/>
             </GithubProvider>
         )
         
@@ -54,7 +54,7 @@ describe('<Github />', () => {
     it('should work correctly when an inexistent user is called', async () => {
         render(
             <GithubProvider>
-                <Test user='inexistentuser'/>
+                <Test user='inexistentuser'  caller='test 2'/>
             </GithubProvider>
         )
 
@@ -73,7 +73,7 @@ describe('<Github />', () => {
     it('should work correctly when an error is returned from repositories request or from starred request', async () => {
         render(
             <GithubProvider>
-                <Test user='testusererror'/>
+                <Test user='testusererror'  caller='test 3'/>
             </GithubProvider>
         )
 
@@ -91,7 +91,7 @@ describe('<Github />', () => {
     it('should work correctly when an error is returned from username request', async () => {
         render(
             <GithubProvider>
-                <Test user='mockservererror'/>
+                <Test user='mockservererror'  caller='test 4'/>
             </GithubProvider>
         )
 
@@ -110,7 +110,7 @@ describe('<Github />', () => {
     it('should not request the user that is the current user', async () => {
         render(
             <GithubProvider>
-                <Test user='testuser'/>
+                <Test user='testuser'  caller='test 5'/>
             </GithubProvider>
         )
 
@@ -127,8 +127,11 @@ describe('<Github />', () => {
     })
 
     it('should throw an error when useGithub is called by a component that is not child of GithubProvider', () => {
+        const consoleErrorFn =jest.spyOn(console, 'error').mockImplementation(() => jest.fn());
+
+        expect(() => render(<Test user='testuser' caller='test 6'/>)).toThrow(/useGithub must be used within a GithubProvider/i)
         
-        expect(() => render(<Test user='testuser'/>)).toThrow(/useGithub must be used within a GithubProvider/i)
+        consoleErrorFn.mockRestore()
     })
 
 })

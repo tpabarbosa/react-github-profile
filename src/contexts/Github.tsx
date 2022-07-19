@@ -51,23 +51,27 @@ export type GithubContextType = {
 
 const GithubContext = createContext<GithubContextType|undefined>(undefined)
 
+const initialData: Omit<GithubContextType, 'getUser'> = {
+    user: null,
+    state: 'empty',
+    stateMsg: '',
+    repositories: [],
+    starred: [],
+}
+
 export const GithubProvider = ({children}: {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState<GithubUser | null>(null);
-    const [state, setState] = useState<States>('empty');
-    const [stateMsg, setStateMsg] = useState('');
-    const [repositories, setRepositories] = useState<GithubRepository[]>([]);
-    const [starred, setStarred] = useState<GithubRepository[]>([]);
+    const [contextData, setContextData] = useState(initialData);
+    const [cache, setCache] = useState<Omit<GithubContextType, 'getUser'>[]>([])
+
 
     const getRepositories = useCallback(async (username: string) => {
         const response = await fetch(`https://api.github.com/users/${username}/repos`)
         if (response.ok) {
             const repositories = await response.json()
-            setRepositories(repositories as GithubRepository[])
-            return true
+            return repositories as GithubRepository[]
         }
-        setRepositories([])
-        return false
+        return [] as GithubRepository[]
     }, [])
 
     const getStarred = useCallback(async (username: string) => {
@@ -75,48 +79,58 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
         const response = await fetch(`https://api.github.com/users/${username}/starred`)
         if (response.ok) {
             const starred = await response.json()
-            setStarred(starred as GithubRepository[])
-            return true
+            return starred as GithubRepository[]
         }
-        setStarred([])
-        return false
+        return [] as GithubRepository[]
     }, [])
 
     const getUser = useCallback(async (username: string) => {
-        if (username==='' || username === user?.login) return false;
-
-        setState('loading')
+        const cachedUser = cache.filter(user => user.user?.login === username)
+        if (cachedUser.length > 0) {
+            setContextData(cachedUser[0])
+            return true
+        } 
+        
+        setContextData({...contextData, state: 'loading'})
         const response = await fetch(`https://api.github.com/users/${username}`)
         if (response.ok) {
-            const user = await response.json()
-            setUser(user as GithubUser)
-            await getRepositories(username);
-            await getStarred(username);
-            setState('success')
-            setStateMsg('');
+            const user = await response.json() as GithubUser
+            const repositories = await getRepositories(username);
+            const starred = await getStarred(username);
+
+            const newUser = {
+                user,
+                repositories,
+                starred,
+                state: 'success',
+                stateMsg: '',
+            } as Omit<GithubContextType, 'getUser'>
+
+            setContextData(newUser)
+            setCache([...cache, newUser])
             return true
         }
-        setUser(null);
-        setRepositories([]);
-        setStarred([]);
-        setState('error');
 
+        const newUser = {...initialData} as Omit<GithubContextType, 'getUser'>
         if (response.status === 404) {
-            setStateMsg(`Username "${username}" not found`)
+            setContextData({
+                ...newUser, 
+                state: 'error', 
+                stateMsg: `Username "${username}" not found`
+            })
         } else {
-            setStateMsg('Something went wrong. Please try another username or try again later.');
+            setContextData({
+                ...newUser, 
+                state: 'error', 
+                stateMsg: 'Something went wrong. Please try another username or try again later.'
+            })
         }
+        setCache([...cache, newUser])
         return false
-    }, [user, getRepositories, getStarred])
-
-    
+    }, [cache, contextData, getRepositories, getStarred])
 
     const provider = {
-        state,
-        stateMsg,
-        user,
-        repositories,
-        starred,
+        ...contextData,
         getUser,
     }
 
@@ -128,7 +142,7 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
 }
 
 
-const useGithub = () => {
+const useGithub = (caller: string = '') => {
     const context = useContext(GithubContext)
     if (!context) {
         throw new Error('useGithub must be used within a GithubProvider')
