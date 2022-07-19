@@ -36,6 +36,7 @@
         ]
     },
     "devDependencies": {
+        "@axe-core/react": "^4.4.3",
         "@testing-library/jest-dom": "^5.16.4",
         "@testing-library/react": "^13.3.0",
         "@testing-library/user-event": "^13.5.0",
@@ -44,6 +45,25 @@
         "@types/react": "^18.0.15",
         "@types/react-dom": "^18.0.6",
         "@types/react-icons": "^3.0.0",
-        "@types/styled-components": "^5.1.25"
+        "@types/styled-components": "^5.1.25",
+        "msw": "^0.44.1"
+    },
+    "jest": {
+        "collectCoverageFrom": [
+            "src/**/*.tsx",
+            "src/**/*.ts",
+            "!**/node_modules/**",
+            "!src/__tests__/mocks/**",
+            "!src/__tests__/utils/**"
+        ],
+        "coverageReporters": [
+            "text-summary",
+            "lcov",
+            "cobertura"
+        ],
+        "testMatch": [
+            "**/*.test.ts",
+            "**/*.test.tsx"
+        ]
     }
 }

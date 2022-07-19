@@ -27,19 +27,19 @@ export const User = () => {
                 }
                 {user.company &&
                 <Styled.Data>
-                    <label>Company:</label>
+                    <strong>Company:</strong>
                     <span>{user.company}</span>
                 </Styled.Data>
                 }
                 {user.location &&
                 <Styled.Data>
-                    <label>Location:</label>
+                    <strong>Location:</strong>
                     <span>{user.location}</span>
                 </Styled.Data>
                 }
                 {user.blog && 
                 <Styled.Data>
-                    <label>Blog:</label>
+                    <strong>Blog:</strong>
                     <span><a className='link' href={user.blog} target="_blank" rel="noreferrer">{user.blog}</a></span>
                 </Styled.Data>
                 }
@@ -88,14 +88,16 @@ const Styled = {
     `,
     Bio: styled.p`
         line-height: 1.6rem;
+        font-size: 1.2rem;
         width: 100%;
         margin: 2.5rem 0;
         font-style: italic;
+        text-align: center;
     `,
     Data: styled.div`
         width: 100%;
         margin: 1rem 0;
-        label {
+        strong {
             margin: 0.5rem;
             font-weight: bold;
         }

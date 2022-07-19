@@ -4,8 +4,8 @@ import { UserStatus } from '../UserStatus';
 import { User } from '../User';
 import useGithub from '../../contexts/Github';
 import { UserPanel } from '../UserPanel';
-import { ErrorMessage } from '../Error';
-import { Loading } from '../Loading';
+import { Message } from '../Message';
+
 
 export const Content = () => {
     const {state, stateMsg} = useGithub();
@@ -19,12 +19,14 @@ export const Content = () => {
                     <UserPanel />
                 </>
             }
-            
+            {state==='empty' && 
+                <Message message='Type a username into the search box to get started'  />
+            }
             {state==='loading' && 
-                <Loading />
+                <Message message='Loading... please wait'  />
             }
             {state==='error' && 
-                <ErrorMessage message={stateMsg} />
+                <Message message={stateMsg} />
             }
         </Styled.Wrapper>
     );

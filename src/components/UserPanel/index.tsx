@@ -1,7 +1,7 @@
 import { useState } from "react"
 import styled, { ThemeProps } from "styled-components"
 import useGithub from "../../contexts/Github"
-import { AppThemeType } from "../../Theme/theme.types"
+import { AppThemeType } from "../../Theme/theme.types";
 import { RepositoryCard } from "../RepositoryCard"
 
 type TabTypes = 'repositories' | 'starred'
@@ -9,8 +9,9 @@ type TabTypes = 'repositories' | 'starred'
 export const UserPanel = () => {
     const [tab, setTab] = useState<TabTypes>('repositories')
     const {repositories, starred} = useGithub()
+    
     const handleTabChange = (newTab: TabTypes) => {
-        if (tab === newTab) return
+        // if (tab === newTab) return
         setTab(newTab)
     }
 
@@ -19,6 +20,7 @@ export const UserPanel = () => {
             <Styled.Panel >
                 <Styled.TabButton 
                     isActive={tab==='repositories'}
+                    disabled={tab==='repositories'}
                     className='btn' 
                     onClick={() => handleTabChange('repositories')}
                 >
@@ -26,6 +28,7 @@ export const UserPanel = () => {
                 </Styled.TabButton>
                 <Styled.TabButton 
                     isActive={tab==='starred'}
+                    disabled={tab==='starred'}
                     className='btn' 
                     onClick={()=>handleTabChange('starred')}
                 >
@@ -82,5 +85,10 @@ const Styled = {
         box-shadow: ${isActive ? `0px 0px 6px 6px ${theme.shadow}` : 'none'};
         min-width: 10rem;
         text-align: center;
+
+        &:disabled {
+            background-color: ${theme?.button?.background} !important;
+            color: ${theme?.button?.color}!important;
+        }
     `)
 };

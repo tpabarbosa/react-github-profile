@@ -21,24 +21,24 @@ export const UserStatus = () => {
                 {user.followers !== 0 &&
                 <Styled.Data>
                     <label>Followers</label>
-                    <span>{user.followers}</span>
+                    <span aria-label='followers count' >{user.followers}</span>
                 </Styled.Data>
                 }
                 {user.following !== 0 &&
                 <Styled.Data>
                     <label>Followings</label>
-                    <span>{user.following}</span>
+                    <span aria-label='following count' >{user.following}</span>
                 </Styled.Data>
                 }
                 {user.public_gists !== 0 &&
                 <Styled.Data>
                     <label>Gists</label>
-                    <span>{user.public_gists}</span>
+                    <span aria-label='gists count' >{user.public_gists}</span>
                 </Styled.Data>
                 }
                 <Styled.Data>
                     <label>Repos</label>
-                    <span>{user.public_repos}</span>
+                    <span aria-label='repositories count' >{user.public_repos}</span>
                 </Styled.Data>
             </Styled.DataWrapper>
             <div>

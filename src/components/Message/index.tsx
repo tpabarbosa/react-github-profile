@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const ErrorMessage = ({message}: {message: string}) => {
+export const Message = ({message}: {message: string}) => {
     return (
         <Styled.Wrapper className="tertiary">
             <Styled.Message>{message}</Styled.Message>

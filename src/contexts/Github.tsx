@@ -34,13 +34,13 @@ export type GithubRepository = {
     forks_count: number;
     open_issues_count: number;
     language: string;
-    fork: string;
+    fork: boolean;
     owner: GithubUser;
 }
 
 type States = 'empty' | 'loading' | 'error' | 'success';
 
-type GithubContextType = {
+export type GithubContextType = {
     state: States;
     stateMsg: string;
     user: GithubUser | null;
@@ -60,7 +60,6 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
     const [starred, setStarred] = useState<GithubRepository[]>([]);
 
     const getRepositories = useCallback(async (username: string) => {
-        if (username==='' || username === user?.login) return false;
         const response = await fetch(`https://api.github.com/users/${username}/repos`)
         if (response.ok) {
             const repositories = await response.json()
@@ -69,10 +68,10 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
         }
         setRepositories([])
         return false
-    }, [user])
+    }, [])
 
     const getStarred = useCallback(async (username: string) => {
-        if (username==='' || username === user?.login) return false;
+        
         const response = await fetch(`https://api.github.com/users/${username}/starred`)
         if (response.ok) {
             const starred = await response.json()
@@ -81,7 +80,7 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
         }
         setStarred([])
         return false
-    }, [user])
+    }, [])
 
     const getUser = useCallback(async (username: string) => {
         if (username==='' || username === user?.login) return false;
@@ -97,11 +96,18 @@ export const GithubProvider = ({children}: {children: React.ReactNode}) => {
             setStateMsg('');
             return true
         }
-        setUser(null)
+        setUser(null);
+        setRepositories([]);
+        setStarred([]);
         setState('error');
-        setStateMsg(`Username "${username}" not found`);
+
+        if (response.status === 404) {
+            setStateMsg(`Username "${username}" not found`)
+        } else {
+            setStateMsg('Something went wrong. Please try another username or try again later.');
+        }
         return false
-    }, [user])
+    }, [user, getRepositories, getStarred])
 
     
 

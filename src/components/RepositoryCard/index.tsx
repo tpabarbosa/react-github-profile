@@ -29,20 +29,20 @@ export const RepositoryCard = ({type, repo}: RepositoryCardProps) => {
             }
             <Style.Counters className="secondary">
                 <Style.Counter>
-                    <label><BsStarFill /></label>
-                    <p>{repo.stargazers_count}</p>
+                    <strong><BsStarFill data-icon='star'/></strong>
+                    <p aria-label='stars count'>{repo.stargazers_count}</p>
                 </Style.Counter>
                 <Style.Counter>
-                    <label><BsEyeFill /></label>
-                    <p>{repo.watchers_count}</p>
+                    <strong><BsEyeFill data-icon='eye' /></strong>
+                    <p aria-label='watchers count'>{repo.watchers_count}</p>
                 </Style.Counter>
                 <Style.Counter>
-                    <label><BiGitRepoForked /></label> 
-                    <p>{repo.forks_count}</p>
+                    <strong><BiGitRepoForked data-icon='fork' /></strong> 
+                    <p aria-label='forks count'>{repo.forks_count}</p>
                 </Style.Counter>
                 <Style.Counter>
-                    <label><GoIssueOpened /></label> 
-                    <p>{repo.open_issues_count}</p>
+                    <strong><GoIssueOpened data-icon='issues'/></strong> 
+                    <p aria-label='open issues count'>{repo.open_issues_count}</p>
                 </Style.Counter>
             </Style.Counters>
             
@@ -109,6 +109,7 @@ const Style = {
         justify-content: center;
         margin-bottom: 1rem;
         padding-top: 0.5rem;
+        flex-wrap: wrap;
     `,
     Counter: styled.span`
         display: flex;
@@ -116,7 +117,7 @@ const Style = {
         justify-content: center;
         margin-right: 1rem;
 
-        label {
+        strong {
             font-size: 1.2rem;
             margin: 0.5rem;
         }

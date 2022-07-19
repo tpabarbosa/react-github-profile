@@ -6,14 +6,13 @@ import { ThemeMode } from './theme.types';
 import ThemeCSS from './themeCSS';
 import { light, dark } from './themes';
 
-export const ThemedApp = ({children}: {children: React.ReactNode}) => {
+export const ThemedApp = ({children, mode}: {children: React.ReactNode, mode?: ThemeMode}) => {
     //const mode = localStorage.get('theme')?.mode as ThemeMode;
-    const mode = 'light' as ThemeMode;
-    const [theme, setTheme] = useState(mode === 'dark' ? dark : light);
+    const [theme, setTheme] = useState(mode==='light' ? light : dark);
 
-    const dispatchTheme = (mode: ThemeMode) => {
+    const dispatchTheme = (newMode: ThemeMode) => {
         //localStorage.set('theme', {mode: mode});
-        setTheme(mode === 'dark' ? dark : light);
+        setTheme(newMode === 'dark' ? dark : light);
     }
 
     return (
