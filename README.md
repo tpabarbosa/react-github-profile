@@ -3,6 +3,11 @@
 This is an app to search Github users by username and display some public information.
 Basically, it consumes the Github API and selects the appropriate properties to show.
 
+> #### Try it now
+>
+> [https://react-github-profile-tpabarbosa.vercel.app/](https://react-github-profile-tpabarbosa.vercel.app/)
+
+
 ![image](/docs/images/image.png?raw=true)
 ![image0](/docs/images/image0.png?raw=true)
 
