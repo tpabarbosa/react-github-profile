@@ -10,7 +10,9 @@ export const User = () => {
             {user &&
             <Styled.DataWrapper>
             <div>
+                {user.avatar_url &&
                 <Styled.Avatar src={user.avatar_url} alt="user avatar"/>
+                }
             </div>
             <div>
                 <Styled.Title>{user.name}</Styled.Title>

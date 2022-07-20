@@ -23,7 +23,9 @@ export const RepositoryCard = ({type, repo}: RepositoryCardProps) => {
             <Style.Title><a className="link" href={repo.html_url} target="_blank" rel="noreferrer"><GoRepo /> {repo.name}</a></Style.Title>
             {type==='starred' &&
             <Style.OwnerWrapper >
+                {repo.owner.avatar_url &&
                 <Style.Avatar src={repo.owner.avatar_url} />
+                }
                 <Style.Description>@{repo.owner.login}</Style.Description>
             </Style.OwnerWrapper>
             }
